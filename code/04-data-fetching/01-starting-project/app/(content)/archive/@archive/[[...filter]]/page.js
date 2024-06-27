@@ -1,19 +1,19 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-import NewsList from '@/components/news-list';
+import NewsList from "@/components/news-list";
 import {
   getAvailableNewsMonths,
   getAvailableNewsYears,
   getNewsForYear,
   getNewsForYearAndMonth,
-} from '@/lib/news';
+} from "@/lib/news";
 
 export default function FilteredNewsPage({ params }) {
   const filter = params.filter;
 
   const selectedYear = filter?.[0];
   const selectedMonth = filter?.[1];
-
+  dasfad;
   let news;
   let links = getAvailableNewsYears();
 
@@ -38,7 +38,7 @@ export default function FilteredNewsPage({ params }) {
     (selectedMonth &&
       !getAvailableNewsMonths(selectedYear).includes(+selectedMonth))
   ) {
-    throw new Error('Invalid filter.');
+    throw new Error("Invalid filter.");
   }
 
   return (
