@@ -1,21 +1,18 @@
 import Link from "next/link";
-import React from "react";
 
-const Header = () => {
+export default function Header() {
   return (
-    <div
-      style={{
-        height: "100px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "10px",
-      }}
-    >
-      <Link href={"/"}>홈</Link>
-      <Link href={"/news"}>뉴스</Link>
-    </div>
+    <header id="main-header">
+      <div id="logo">
+        <Link href="/">NextNews</Link>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <Link href="/news">News</Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
   );
-};
-
-export default Header;
+}
