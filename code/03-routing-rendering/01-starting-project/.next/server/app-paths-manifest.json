@@ -1,6 +1,3 @@
 {
-  "/news/page": "app/news/page.js",
-  "/news/[slug]/page": "app/news/[slug]/page.js",
-  "/icon.jpg/route": "app/icon.jpg/route.js",
-  "/archives/@archives/[[...filter]]/page": "app/archives/@archives/[[...filter]]/page.js"
+  "/not-found": "app/not-found.js"
 }
