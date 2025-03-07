@@ -159,11 +159,13 @@ main {
 }
 
 .post img {
-  width: 8rem;
-  height: 6rem;
   object-fit: cover;
 }
-
+.post-image {
+  position: relative;
+  width:8rem;
+  height: 6rem;
+}
 .post-content {
   flex: 1;
 }

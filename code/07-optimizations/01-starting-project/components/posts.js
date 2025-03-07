@@ -1,23 +1,36 @@
 "use client";
 
-import { useOptimistic } from 'react';
+import { useOptimistic } from "react";
 
-import { formatDate } from '@/lib/format';
-import LikeButton from './like-icon';
-import { togglePostLikeStatus } from '@/actions/posts';
+import { formatDate } from "@/lib/format";
+import LikeButton from "./like-icon";
+import { togglePostLikeStatus } from "@/actions/posts";
+import Image from "next/image";
 
 function Post({ post, action }) {
+  function imageLoader(config) {
+    const [urlStart, urlEnd] = config.src.split("upload/");
+    console.log(urlStart, urlEnd);
+    const transformations = `w_200,h_150,q_${config.quality}`;
+    return `${urlStart}upload/${transformations}/${urlEnd}`;
+  }
   return (
     <article className="post">
       <div className="post-image">
-        <img src={post.image} alt={post.title} />
+        <Image
+          loader={imageLoader}
+          fill
+          src={post.image}
+          alt={post.title}
+          quality={50}
+        />
       </div>
       <div className="post-content">
         <header>
           <div>
             <h2>{post.title}</h2>
             <p>
-              Shared by {post.userFirstName} on{' '}
+              Shared by {post.userFirstName} on{" "}
               <time dateTime={post.createdAt}>
                 {formatDate(post.createdAt)}
               </time>
@@ -26,7 +39,7 @@ function Post({ post, action }) {
           <div>
             <form
               action={action.bind(null, post.id)}
-              className={post.isLiked ? 'liked' : ''}
+              className={post.isLiked ? "liked" : ""}
             >
               <LikeButton />
             </form>
@@ -39,20 +52,25 @@ function Post({ post, action }) {
 }
 
 export default function Posts({ posts }) {
-  const [optimisticPosts, updateOptimisticPosts] = useOptimistic(posts, (prevPosts, updatedPostId) => {
-    const updatedPostIndex = prevPosts.findIndex(post => post.id === updatedPostId);
+  const [optimisticPosts, updateOptimisticPosts] = useOptimistic(
+    posts,
+    (prevPosts, updatedPostId) => {
+      const updatedPostIndex = prevPosts.findIndex(
+        (post) => post.id === updatedPostId
+      );
 
-    if (updatedPostIndex === -1) {
-      return prevPosts;
+      if (updatedPostIndex === -1) {
+        return prevPosts;
+      }
+
+      const updatedPost = { ...prevPosts[updatedPostIndex] };
+      updatedPost.likes = updatedPost.likes + (updatedPost.isLiked ? -1 : 1);
+      updatedPost.isLiked = !updatedPost.isLiked;
+      const newPosts = [...prevPosts];
+      newPosts[updatedPostIndex] = updatedPost;
+      return newPosts;
     }
-
-    const updatedPost = { ...prevPosts[updatedPostIndex] };
-    updatedPost.likes = updatedPost.likes + (updatedPost.isLiked ? -1 : 1);
-    updatedPost.isLiked = !updatedPost.isLiked;
-    const newPosts = [...prevPosts];
-    newPosts[updatedPostIndex] = updatedPost;
-    return newPosts;
-  })
+  );
 
   if (!optimisticPosts || optimisticPosts.length === 0) {
     return <p>There are no posts yet. Maybe start sharing some?</p>;
